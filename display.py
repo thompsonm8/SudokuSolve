@@ -13,6 +13,9 @@ br = [
     [0, 4, 9, 2, 0, 6, 0, 0, 7]
     ]
 
+#Just making a copy to check whether number was already part of the puzzle
+brCopy = br
+
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 
@@ -25,6 +28,8 @@ canvas = pg.display.set_mode((900,900))
 
 pg.display.set_caption("Sudoku Solver")
 exit = False
+active = (-1,-1) # active(x,y) is the spot on the board that will receive the number, if -1,-1 that means no spot is active
+keysAllowed = [pg.K_1, pg.K_2, pg.K_3, pg.K_4, pg.K_5, pg.K_6, pg.K_7, pg.K_8, pg.K_9] # the only keys users should be allowed to use
 
 while not exit:
     for event in pg.event.get():
@@ -36,6 +41,13 @@ while not exit:
             x = mousePOS[0] // 100
             y = mousePOS[1] // 100
             print(f"X: {x}, Y: {y}, Value: {br[y][x]}")
+            if brCopy[y][x] == 0:
+                active = (x,y)
+        
+        if event.type == pg.KEYDOWN:
+            if event.key in keysAllowed and active != (-1,-1): # No out of bounds error because of this check
+                br[active[1]][active[0]] = event.unicode
+                active = (-1,-1)
     
     canvas.fill(WHITE)
     for x in range(9):
