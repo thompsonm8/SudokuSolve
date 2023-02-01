@@ -18,13 +18,15 @@ brCopy = br
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
+LIGHT_BLUE = (0,0,0)
 
 pg.init()
 
 font1 = pg.font.SysFont('chalkduster.ttf', 18)
+solveButton = font1.render("Solve", True, BLACK)
 
 
-canvas = pg.display.set_mode((900,900))
+canvas = pg.display.set_mode((1200,900))
 
 pg.display.set_caption("Sudoku Solver")
 exit = False
@@ -38,11 +40,15 @@ while not exit:
 
         if event.type == pg.MOUSEBUTTONUP:
             mousePOS = pg.mouse.get_pos()
-            x = mousePOS[0] // 100
-            y = mousePOS[1] // 100
-            print(f"X: {x}, Y: {y}, Value: {br[y][x]}")
-            if brCopy[y][x] == 0:
-                active = (x,y)
+            if mousePOS[0] < 900:
+                x = mousePOS[0] // 100
+                y = mousePOS[1] // 100
+                #print(f"X: {x}, Y: {y}, Value: {br[y][x]}")
+                if brCopy[y][x] == 0:
+                    active = (x,y)
+            else:
+                if 998 <= mousePOS[0] <= 1102 and 423 <= mousePOS[1] <= 477:
+                    br = s.solve(brCopy)
         
         if event.type == pg.KEYDOWN:
             if event.key in keysAllowed and active != (-1,-1): # No out of bounds error because of this check
@@ -50,7 +56,13 @@ while not exit:
                 active = (-1,-1)
     
     canvas.fill(WHITE)
-    for x in range(9):
+
+    pg.draw.rect(canvas, BLACK, [998,423,104,54])
+    pg.draw.rect(canvas, WHITE, [1002,427,96,46])
+    canvas.blit(solveButton,(1032,445))
+
+
+    for x in range(10):
         if x % 3 != 0:
             pg.draw.line(canvas,BLACK, ((x*100),0),((x*100),900))
             pg.draw.line(canvas,BLACK, (0,(x*100)),(900,(x*100)))
@@ -63,8 +75,5 @@ while not exit:
             if br[y][x] != 0:
                 num = font1.render(str(br[y][x]), True, BLACK)
                 canvas.blit(num,((x*100)+45,(y*100+45)))
-
-    #br = s.solve(br)
-    
     
     pg.display.update()
