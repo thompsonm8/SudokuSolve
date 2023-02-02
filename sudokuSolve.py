@@ -11,7 +11,7 @@ Sample Board
     [1, 2, 0, 0, 0, 7, 4, 0, 0],
     [0, 4, 9, 2, 0, 6, 0, 0, 7]
 ]
-Rules of Sodoku:
+Rules of Sudoku:
 3x3 squares no duplicates
 Rows and Columns no duplicates
 
@@ -71,26 +71,31 @@ def solve(board):
                 return False
         return True
 
+    # Returns True if adding the number follows all rules.
     def fulltest(x,y,num):
         return check3(x,y,num) and checkCol(x,num) and checkRow(y,num)
     
 
-
+    # Backtracking Algo
     def solveHelper(x,y):
 
+        # Base Case: if Y is equal to 9 it is out of bounds and the algorithim succeeded
         if y == 9:
             return True
         
+        # If X is equal to 9 the algorithim needs to move down a row
         if x == 9:
             if(solveHelper(0,y+1)):
                 return True
             return False
 
+        # Move on if one of the numbers are already set initially
         if br[y][x] != 0:
             if(solveHelper(x+1,y)):
                 return True
             return False
         
+        # Exaust 1-9 for each cell before moving down the row
         for i in range(1,10):
             #print(f"X = {x}, Y = {y}, I = {i}")
             if(fulltest(x,y,i)):
