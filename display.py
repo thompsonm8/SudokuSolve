@@ -17,7 +17,7 @@ board = [
 # Just making a copy to check whether number was already part of the puzzle 
 # Made these Deepcopies so that operations done / changes made on one will not affect the other
 boardCheck = c.deepcopy(board) 
-solved = s.solve(c.deepcopy(board))
+solved = s.solve(c.deepcopy(boardCheck))
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -70,7 +70,7 @@ while not exit:
         # As long as there is an active cell a number can be typed
         if event.type == pg.KEYDOWN:
             if event.key in keysAllowed and active != (-1,-1): # No out of bounds error because of this check
-                board[active[1]][active[0]] = event.unicode
+                board[active[1]][active[0]] = int(event.unicode)
                 active = (-1,-1)
     
     canvas.fill(WHITE)
@@ -92,7 +92,7 @@ while not exit:
         pg.draw.rect(canvas, WHITE, [1002,352,96,46])
     canvas.blit(checkButton, (1027,370))
 
-    # Button 3 - Change Board? TBD
+    # Button 3 - Change Board
     pg.draw.rect(canvas, BLACK, [998,498,104,54])
     if 998 <= mousePOS[0] < 1050 and 498 <= mousePOS[1] <= 552:
         pg.draw.rect(canvas, LIGHT_BLUE, [1002,502,48,46])
